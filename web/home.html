@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>GyroID PoC</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="css/source-sans-pro.css" rel="stylesheet">
+    <link href="css/merriweather.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/sensorid.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div id="loading" style="display: none">
+    <div class="sk-fading-circle">
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    </div>
+</div>
+
+<div class="masthead">
+    <div class="masthead-overlay"></div>
+    <div class="masthead-bg"></div>
+    <div class="container h-100">
+        <div class="row h-100 mt-3">
+            <div class="col-12 my-auto">
+                <!-- starts here -->
+                <div class="masthead-content text-white py-5 py-md-0 mt-4" id="index-div">
+                    <div class="col-md-4 offset-md-4 text-center mb-5">
+                        <img src="img/cambridge.png" class="center-block img-fluid">
+                    </div>
+                    <div class="mb-3">
+                        <h2 class="mb-5 text-center">GyroID PoC</h2>
+                        <p class="mb-3">This proof-of-concept website obtains a hardware identifier for iOS devices based on the calibration information of the gyroscope. This identifier cannot be changed by the user, including with a factory reset. This method works for iPhone or iPad devices running an iOS 12.1 or earlier. For more information, please visit the <a href="https://sensorid.cl.cam.ac.uk/" class="text-warning">SensorID website</a> or read <a href="https://www.ieee-security.org/TC/SP2019/papers/405.pdf" class="text-warning">our paper</a>.</p>
+                        <p>Extracting the calibration matrix typically takes a few seconds and does not depend on the position or orientation of the device. Vigorous movement during extraction requires additional samples.</p>
+                        <p>This website only works for iOS devices with an <a href="https://en.wikipedia.org/wiki/Apple_motion_coprocessors" class="text-warning">M-series motion coprocessor</a>.</p>
+                        <p>Click the button below to extract the gyroscope calibration matrix (GyroID) of your device.</p>
+                    </div>
+
+                    <p class="device-error mb-5 text-danger font-weight-bold" style="display:none">Sorry, this PoC currently does not support your device.</p>
+
+                    <div class="input-group-button text-center mb-4">
+                        <button class="btn btn-collect" onclick="participate();" type="submit">Generate GyroID</button>
+                    </div>
+
+                    <p class="mb-4">Please <a href="mailto:cl-sensorid@lists.cam.ac.uk" class="text-warning">contact us</a> if you require further information.</p>
+
+                </div>
+                <!-- ends here -->
+
+                <!-- starts here -->
+                <div class="masthead-content text-white py-5 py-md-0 mt-4" id="submit-div" style="display:none;opacity:0;">
+                    <!-- <div class="masthead-content text-white py-5 py-md-0 mt-4" id="submit-div"> -->
+
+                    <h2 class="mb-5 text-center">GyroID PoC</h2>
+                    <!-- <p class="mb-5">Thanks for joining the study!</p> -->
+                    <div class="text-center mb-4">
+                        <p class="fs-subtitle">Timestamp: <div id="time"></div></p>
+
+                        <p id="sensorid" class="fs-subtitle" style="word-wrap: break-word;">The GyroID for current device is:</p>
+
+                        <table class="table table-bordered">
+                            <caption class="text-center fs-subtitle">Unit: 2^{-16} degrees per second per digit</caption>
+                            <!-- <caption class="text-center fs-subtitle">Sampling Time: <span id='sampling-time'></span></caption>
+                            <caption class="text-center fs-subtitle">Processing Time: <span id='processing-time'></span></caption> -->
+
+                            <tbody>
+                            <tr>
+                                <td id="m11">0</td>
+                                <td id="m12">0</td>
+                                <td id="m13">0</td>
+                            </tr>
+                            <tr>
+                                <td id="m21">0</td>
+                                <td id="m22">0</td>
+                                <td id="m23">0</td>
+                            </tr>
+                            <tr>
+                                <td id="m31">0</td>
+                                <td id="m32">0</td>
+                                <td id="m33">0</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <p class="fs-subtitle">Sampling Time: <span id="sampling-time"></span></p>
+                        <p class="fs-subtitle">Processing Time: <span id="processing-time"></span></p>
+
+                    </div>
+
+                    <div class="input-group-button text-center mb-4 mt-4">
+                        <button class="btn btn-secondary" onclick="participate();">Regenerate GyroID</button>
+                    </div>
+
+                    <div class="input-group-button text-center">
+                        <button class="btn btn-collect" onclick="switchPage(1);">Back to homepage</button>
+                    </div>
+
+                </div>
+                <!-- ends here -->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery.easing.min.js"></script>
+<script src="js/math.min.js"></script>
+<script src="js/gyronorm.complete.min.js"></script>
+<script type="text/javascript" src="https://wurfl.io/wurfl.js"></script>
+<script src="js/matrix.js"></script>
+<script src="js/numeric-1.2.6.min.js"></script>
+<script src="js/gyro.js"></script>
+
+</body>
+
+</html>
